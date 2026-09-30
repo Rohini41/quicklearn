@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickLearn AI</title>
+    <style>
+        :root {
+            --bg: #08111f;
+            --panel: rgba(14, 28, 48, 0.82);
+            --panel-2: rgba(20, 39, 65, 0.72);
+            --text: #edf6ff;
+            --muted: #91a7bd;
+            --accent: #65d6ff;
+            --accent-2: #9b7cff;
+            --border: rgba(255,255,255,0.10);
+            --user: #193a5b;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 15% 15%, rgba(101,214,255,.18), transparent 28%),
+                radial-gradient(circle at 85% 10%, rgba(155,124,255,.18), transparent 30%),
+                linear-gradient(145deg, #050b14, var(--bg));
+            display: grid;
+            place-items: center;
+            padding: 22px;
+        }
+
+        .shell {
+            width: min(980px, 100%);
+            height: min(760px, 92vh);
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            background: var(--panel);
+            backdrop-filter: blur(24px);
+            box-shadow: 0 30px 90px rgba(0,0,0,.42);
+        }
+
+        header {
+            padding: 24px 28px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .brand { display: flex; align-items: center; gap: 14px; }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 15px;
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            color: #07101b;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            box-shadow: 0 10px 30px rgba(101,214,255,.22);
+        }
+
+        h1 { margin: 0; font-size: 1.25rem; }
+        .subtitle { margin: 4px 0 0; color: var(--muted); font-size: .88rem; }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #b7c8d8;
+            font-size: .8rem;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #67e8a4;
+            box-shadow: 0 0 12px #67e8a4;
+        }
+
+        #chat {
+            padding: 28px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .welcome {
+            margin: auto;
+            max-width: 600px;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .welcome h2 { margin: 0 0 10px; font-size: 2rem; }
+        .welcome p { color: var(--muted); line-height: 1.6; }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .suggestion {
+            border: 1px solid var(--border);
+            background: var(--panel-2);
+            color: #cde4f8;
+            border-radius: 999px;
+            padding: 9px 13px;
+            cursor: pointer;
+        }
+
+        .message {
+            max-width: 78%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            line-height: 1.55;
+            white-space: pre-wrap;
+        }
+
+        .user {
+            align-self: flex-end;
+            background: var(--user);
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot {
+            align-self: flex-start;
+            background: var(--panel-2);
+            border-bottom-left-radius: 5px;
+        }
+
+        footer {
+            padding: 18px 22px 22px;
+            border-top: 1px solid var(--border);
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: rgba(0,0,0,.16);
+        }
+
+        textarea {
+            flex: 1;
+            min-height: 48px;
+            max-height: 130px;
+            resize: none;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: var(--text);
+            padding: 13px 12px;
+            font: inherit;
+        }
+
+        button[type="submit"] {
+            width: 52px;
+            border: 0;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: #07101b;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        }
+
+        button:disabled { opacity: .55; cursor: not-allowed; }
+
+        @media (max-width: 650px) {
+            body { padding: 0; }
+            .shell { height: 100vh; border-radius: 0; }
+            header { padding: 18px; }
+            #chat { padding: 18px; }
+            footer { padding: 12px; }
+            .message { max-width: 90%; }
+        }
+    </style>
+</head>
+<body>
+    <main class="shell">
+        <header>
+            <div class="brand">
+                <div class="logo">Q</div>
+                <div>
+                    <h1>QuickLearn AI</h1>
+                    <p class="subtitle">Your focused study companion</p>
+                </div>
+            </div>
+            <div class="status"><span class="dot"></span> Study mode</div>
+        </header>
+
+        <section id="chat">
+            <div class="welcome" id="welcome">
+                <h2>Learn faster. Understand better.</h2>
+                <p>
+                    Ask study-related questions, request explanations, compare concepts,
+                    or get help preparing for your next lesson.
+                </p>
+                <div class="suggestions">
+                    <button class="suggestion" data-question="Explain photosynthesis simply">Explain a concept</button>
+                    <button class="suggestion" data-question="Give me a short study plan for mathematics">Create a study plan</button>
+                    <button class="suggestion" data-question="Quiz me on basic physics">Start a quiz</button>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <form id="chatForm">
+                <textarea id="message" placeholder="Ask a study question..." aria-label="Study question"></textarea>
+                <button type="submit" aria-label="Send">➤</button>
+            </form>
+        </footer>
+    </main>
+
+    <script>
+        const chat = document.getElementById("chat");
+        const form = document.getElementById("chatForm");
+        const input = document.getElementById("message");
+
+        function addMessage(text, type) {
+            const welcome = document.getElementById("welcome");
+            if (welcome) welcome.remove();
+
+            const message = document.createElement("div");
+            message.className = `message ${type}`;
+            message.textContent = text;
+            chat.appendChild(message);
+            chat.scrollTop = chat.scrollHeight;
+            return message;
+        }
+
+        document.querySelectorAll(".suggestion").forEach(button => {
+            button.addEventListener("click", () => {
+                input.value = button.dataset.question;
+                input.focus();
+            });
+        });
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const message = input.value.trim();
+            if (!message) return;
+
+            addMessage(message, "user");
+            input.value = "";
+
+            const sendButton = form.querySelector("button");
+            sendButton.disabled = true;
+
+            const thinking = addMessage("Thinking…", "bot");
+
+            try {
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({message})
+                });
+
+                const data = await response.json();
+                thinking.textContent = data.answer || data.error || "Something went wrong.";
+            } catch {
+                thinking.textContent = "Unable to connect to the chatbot right now.";
+            } finally {
+                sendButton.disabled = false;
+                input.focus();
+                chat.scrollTop = chat.scrollHeight;
+            }
+        });
+
+        input.addEventListener("keydown", event => {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                form.requestSubmit();
+            }
+        });
+    </script>
+</body>
+</html>
